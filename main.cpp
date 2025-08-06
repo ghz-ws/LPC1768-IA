@@ -10,10 +10,10 @@ SPI adc(P0_18,P0_17,P0_15);    //adc
 DigitalOut cs(P0_20);       //adc cs
 DigitalIn drdy(P0_19);   //adc drdy
 
-DigitalOut i0(P0_0);    //100 lo on
-DigitalOut i1(P0_1);    //1k
-DigitalOut i2(P0_10);   //10k
-DigitalOut i3(P0_11);   //100k
+DigitalOut i0(P0_0);    //10 lo on
+DigitalOut i1(P0_1);    //100
+DigitalOut i2(P0_10);   //1k
+DigitalOut i3(P0_11);   //10k
 
 DigitalOut v0(P1_29);   //0=x1, 1=x2, 2=x4, 3=x8
 DigitalOut v1(P1_28);
@@ -42,7 +42,7 @@ const uint8_t rst=0b0110;
 const uint8_t wreg=0b0100;
 const uint8_t start=0b1000;
 void drdy_wait();
-int16_t adc_read(int8_t ch);
+int16_t adc_read(uint8_t ch);
 
 //calc.
 uint8_t integ,i,j;
@@ -204,7 +204,7 @@ void val_send(float val){
 void waveset(uint32_t freq, uint16_t ampl){
     uint16_t buf;   //spi send buf
     char set[2];    //i2c send buf
-    uint16_t pha=80; //for adjust
+    uint16_t pha=85; //for adjust
     if(freq>30000000)freq=30000000;
     if(ampl>2400)ampl=2400;
 
@@ -254,7 +254,7 @@ void drdy_wait(){
     }
 }
 
-int16_t adc_read(int8_t ch){
+int16_t adc_read(uint8_t ch){
     uint8_t buf[2];     //spi receive buf
     cs=0;
     adc.write((wreg<<4));       //write addr 0x00, 1byte
@@ -278,28 +278,28 @@ void ig_set(){
             i1=1;
             i2=1;
             i3=1;
-            ig=100;
+            ig=10;
         break;
         case 1:
             i0=1;
             i1=0;
             i2=1;
             i3=1;
-            ig=1000;
+            ig=100;
         break;
         case 2:
             i0=1;
             i1=1;
             i2=0;
             i3=1;
-            ig=10000;
+            ig=1000;
         break;
         case 3:
             i0=1;
             i1=1;
             i2=1;
             i3=0;
-            ig=100000;
+            ig=10000;
         break;
     }
 }
